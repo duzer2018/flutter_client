@@ -1,3 +1,5 @@
+import 'package:cdcalctest/core/blocs/bloc_auth.dart';
+import 'package:cdcalctest/core/blocs/bloc_provider.dart';
 import 'package:cdcalctest/core/ui/auth/auth_view.dart';
 import 'package:cdcalctest/core/ui/tab_view.dart';
 import 'package:flutter/material.dart';
@@ -9,9 +11,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: true,
-      home: Scaffold(
-        body: LoginPage(),
-      ),
+      home:  BlocProvider<AuthBloc>(
+        bloc: AuthBloc(),
+        child:Scaffold(
+          body: LoginPage(),
+      )),
 //      theme: ThemeData(
 //        primarySwatch: Colors.blue,
 //      ),

@@ -1,3 +1,5 @@
+import 'package:cdcalctest/core/blocs/bloc_auth.dart';
+import 'package:cdcalctest/core/blocs/bloc_provider.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
@@ -145,6 +147,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   loginAndRegistration() {
+    final AuthBloc authBloc = BlocProvider.of<AuthBloc>(context);
     return AnimatedContainer(
         padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
         decoration: BoxDecoration(color: Colors.grey[200], border: border),
@@ -184,7 +187,9 @@ class _LoginPageState extends State<LoginPage> {
                   child: MaterialButton(
                     textColor: Colors.white,
                     child: Text("Login"),
-                    onPressed: () {},
+                    onPressed: () {
+
+                    },
                   ))
                   : Container(
                   width: 120,
@@ -195,7 +200,9 @@ class _LoginPageState extends State<LoginPage> {
                   child: MaterialButton(
                     textColor: Colors.white,
                     child: Text("Registration"),
-                    onPressed: () {},
+                    onPressed: () {
+                      authBloc.register();
+                    },
                   ))
             ])));
   }
