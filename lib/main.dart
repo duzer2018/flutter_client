@@ -1,3 +1,4 @@
+import 'package:cdcalctest/core/ui/auth/auth_view.dart';
 import 'package:cdcalctest/core/ui/tab_view.dart';
 import 'package:flutter/material.dart';
 
@@ -7,10 +8,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+      debugShowCheckedModeBanner: true,
+      home: Scaffold(
+        body: LoginPage(),
       ),
-      home: TabView(),
+//      theme: ThemeData(
+//        primarySwatch: Colors.blue,
+//      ),
+//      home: TabView(),
     );
   }
 }
