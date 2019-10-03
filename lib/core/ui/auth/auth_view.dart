@@ -188,6 +188,7 @@ class _LoginPageState extends State<LoginPage> {
                     textColor: Colors.white,
                     child: Text("Login"),
                     onPressed: () {
+                      authBloc.login();
 
                     },
                   ))
