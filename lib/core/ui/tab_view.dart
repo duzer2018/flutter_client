@@ -1,3 +1,4 @@
+import 'package:cdcalctest/core/ui/prifile_tab.dart';
 import 'package:flutter/material.dart';
 
 class TabView extends StatefulWidget {
@@ -60,7 +61,7 @@ class TabViewState extends State<TabView> with TickerProviderStateMixin {
             child: Text("Tab 3"),
           ),
         ),
-        Container(),
+        Container(child: PrifileTab(),),
       ],
     );
   }
