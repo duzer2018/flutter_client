@@ -16,7 +16,10 @@ class Network{
 //    var response = await http.post(BASE_URL, body: body);
 //    print('_makeHTTPLogin  body: ${response.body}');
 
-    proxy.call('auth.login', {'phone':'kirill1233455667@zhuharev.ru','password':'rf#45&Qqqq689689'})
+    proxy.call('auth.login', {
+      'phone':'kirill1233455667@zhuharev.ru',
+      'password':'rf#45&Qqqq689689'
+    })
         .then((returned)=>proxy.checkError(returned))
         .then((result){print("body: $result");})
         .catchError((error){print(error);});
@@ -24,15 +27,17 @@ class Network{
 
   Future<User> registerUser() async{
     User user = User();
-    proxy.call('auth.reg', {'phone':'kirill123345566789019@zhuharev.ru','password':'rf#45&Qqqq689689'})
+    proxy.call('auth.reg', {
+      'phone':'kirill123345566789019@zhuharev.ru',
+      'password':'rf#45&Qqqq689689'
+    })
         .then((returned)=>proxy.checkError(returned))
         .then((result){
           print("body: $result");
           user = User.fromResult(result);
-          print("user id =  ${user.userId} \n  user email = ${user.email} "
+          print("user id =  ${user.userId} \n  user email = ${user.params.email} "
               "\n user avatar = ${user.avatarUrl}");
-    })
-        .catchError((error){print(error);});
+        }).catchError((error){print(error);});
     return user;
   }
 }

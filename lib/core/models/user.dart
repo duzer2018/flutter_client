@@ -1,30 +1,27 @@
-import 'dart:convert';
-
 class User {
   String userId;
-  String email;
+  Params params;
   String avatarUrl;
 
-  User({this.userId, this.email, this.avatarUrl});
+  User({this.userId, this.params, this.avatarUrl});
 
   factory User.fromResult(Map<String, dynamic> json) {
     return User(
       userId: json['userId'].toString(),
-      email: json['email'] as String,
+      params: Params.fetchResult(json['params']),
       avatarUrl: json['avatarUrl'] as String,
     );
   }
 }
+class Params {
+  String email;
 
-//class Result {
-//  String userId;
-//
-//  Result({this.userId});
-//
-//  factory Result.fetchResult(Map<String, dynamic> json){
-//    return Result(userId: json['userId'] as String);
-//  }
-//}
+  Params({this.email});
+
+  factory Params.fetchResult(Map<String, dynamic> json){
+    return Params(email: json['email'] as String);
+  }
+}
 
 //body: {"jsonrpc":"2.0","id":2,"result":{"userId":5447,"firstName":"","lastName":"","Role":0,
 //"params":{"promotedBy":0,"attributes":null,"email":"kirill123345566@zhuharev.ru","bio":"","bdate":"0001-01-01T00:00:00Z","hometown":""},
