@@ -1,5 +1,6 @@
 import 'package:cdcalctest/core/blocs/bloc_profile.dart';
 import 'package:cdcalctest/core/ui/widgets/bottom_sheet.dart';
+import 'package:cdcalctest/core/ui/widgets/text_form.dart';
 import 'package:flutter/material.dart';
 
 class PrifileTab extends StatefulWidget {
@@ -12,14 +13,19 @@ class PrifileTab extends StatefulWidget {
 class PrifileTabState extends State<PrifileTab> {
   final profileBloc = ProfileBloc();
   String name = "Tony Stark";
+  String email = '';
   static final RegExp nameRegExp = RegExp('[a-zA-Z-а-яА-Я-]');
+  static final RegExp nameRegExp2 = RegExp("[a-zA-Z0-9+.\_\%-+]{1,256}@[a-zA-Z0-9][a-zA-Z0-9-]{0,64}(.[a-zA-Z0-9][a-zA-Z0-9-]{0,25})+");
   GlobalKey<FormState> _key = new GlobalKey();
+  GlobalKey<FormState> _key2 = new GlobalKey();
   bool _validate = false;
   FocusNode _focusNode;
 
   @override
   void initState() {
     // profileBloc.getUserAvatar();
+    profileBloc.getEmail();
+    profileBloc.getUserName();
     _focusNode = FocusNode();
     _focusNode.addListener(() {
       if (!_focusNode.hasFocus) saveName();
@@ -47,10 +53,10 @@ class PrifileTabState extends State<PrifileTab> {
                           height: 150,
                           decoration: BoxDecoration(
                             image: DecorationImage(
-                              fit: BoxFit.cover,
-                              image: snapshot.data != null
-                                  ? FileImage(snapshot.data)
-                                  : AssetImage("assets/user.png")),
+                                fit: BoxFit.cover,
+                                image: snapshot.data != null
+                                    ? FileImage(snapshot.data)
+                                    : AssetImage("assets/user.png")),
                             border: Border.all(width: 3, color: Colors.grey),
                             borderRadius: BorderRadius.all(Radius.circular(30)),
                           ),
@@ -68,25 +74,35 @@ class PrifileTabState extends State<PrifileTab> {
             Container(
                 width: 170,
                 child: Form(
-                    key: _key, autovalidate: _validate, child: formInput())),
+                    key: _key, autovalidate: _validate, child: UserTextForm(stream: profileBloc.outUserName,
+                    focusNode: _focusNode, nameRegExp: nameRegExp, onSaved: (String val) {
+            name = val;
+          },))),
           ],
-        )
-      ])),
+        ),
+      ]))
     ]);
   }
 
+
   Widget formInput() {
-    return TextFormField(
-      focusNode: _focusNode,
-      decoration: InputDecoration(
-          hasFloatingPlaceholder: false,
-          alignLabelWithHint: true,
-          hintText: name),
-      validator: (value) => value.length < 3
-          ? 'Name less than 3 characters'
-          : (nameRegExp.hasMatch(value) ? null : 'Enter a Valid Name'),
-      onSaved: (String val) {
-        name = val;
+    return StreamBuilder(
+      stream: profileBloc.outUserName,
+      builder: (context, snapshot) {
+        return TextFormField(
+          maxLength: 25,
+          focusNode: _focusNode,
+          decoration: InputDecoration(
+              hasFloatingPlaceholder: false,
+              alignLabelWithHint: true,
+              hintText: snapshot.data),
+          validator: (value) => value.length < 3
+              ? 'Name less than 3 characters'
+              : (nameRegExp.hasMatch(value) ? null : 'Enter a Valid Name'),
+          onSaved: (String val) {
+            name = val;
+          },
+        );
       },
     );
   }
@@ -94,6 +110,7 @@ class PrifileTabState extends State<PrifileTab> {
   saveName() {
     if (_key.currentState.validate()) {
       _key.currentState.save();
+      profileBloc.setUserName(name);
     } else {
       setState(() {
         _validate = true;
@@ -125,7 +142,7 @@ class PrifileTabState extends State<PrifileTab> {
                 BotSheet(
                   icon: Icons.delete,
                   label: "Remove photo",
-                  onTap: () => profileBloc.userAvatar.add(null),
+                  onTap: () => profileBloc.userAvatarStream.add(null),
                 )
               ],
             ),

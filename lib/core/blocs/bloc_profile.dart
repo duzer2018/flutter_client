@@ -8,21 +8,25 @@ class ProfileBloc{
 
   File _image;
 
-final userAvatar = BehaviorSubject();
+final userAvatarStream = BehaviorSubject();
+final userNameStream = BehaviorSubject();
+final emailStream = BehaviorSubject();
 final _repository = Repository();
 
-Observable get outUserAvatar => userAvatar.stream;
+Observable get outUserAvatar => userAvatarStream.stream;
+Observable get outUserName => userNameStream.stream;
+Observable get outEmail => emailStream.stream;
 
   Future getImageFromCamera() async {
     var image = await ImagePicker.pickImage(source: ImageSource.camera);
     _image = image;
-      userAvatar.add(_image);
+      userAvatarStream.add(_image);
   }
 
   Future getImageFromGallery() async {
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
     _image = image;
-      userAvatar.add(_image);
+      userAvatarStream.add(_image);
       _repository.setUserAvatar(_image.toString());
   }
 
@@ -33,7 +37,27 @@ Observable get outUserAvatar => userAvatar.stream;
     userAvatar.add(_image);
   }
 
+  setUserName(String userName){
+    _repository.setUserName(userName);
+  }
+
+  getUserName() async{
+    String userName = await _repository.getUserName();
+    userNameStream.add(userName);
+  }
+
+  setEmail(String email){
+    _repository.setEmail(email);
+  }
+
+  getEmail() async{
+    String email = await _repository.getEmail();
+    emailStream.add(email);
+  }
+
   dispose(){
-    userAvatar.close();
+    userAvatarStream.close();
+    userNameStream.close();
+    emailStream.close();
   }
 }
