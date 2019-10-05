@@ -1,61 +1,66 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:ui';
 
+import 'package:cdcalctest/core/blocs/bloc_provider.dart';
 import 'package:cdcalctest/core/resources/repository.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:rxdart/rxdart.dart';
-class ProfileBloc{
+
+class ProfileBloc extends BlocBase {
+  ProfileBloc() {
+    getUserName();
+    getEmail();
+  }
 
   File _image;
 
-final userAvatarStream = BehaviorSubject();
-final userNameStream = BehaviorSubject();
-final emailStream = BehaviorSubject();
-final _repository = Repository();
+  final userAvatarStream = BehaviorSubject();
+  final userNameStream = BehaviorSubject();
+  final emailStream = BehaviorSubject();
+  final _repository = Repository();
 
-Observable get outUserAvatar => userAvatarStream.stream;
-Observable get outUserName => userNameStream.stream;
-Observable get outEmail => emailStream.stream;
+  Observable get outUserAvatar => userAvatarStream.stream;
+  Observable get outUserName => userNameStream.stream;
+  Observable get outEmail => emailStream.stream;
 
   Future getImageFromCamera() async {
     var image = await ImagePicker.pickImage(source: ImageSource.camera);
     _image = image;
-      userAvatarStream.add(_image);
+    userAvatarStream.add(_image);
   }
 
   Future getImageFromGallery() async {
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
     _image = image;
-      userAvatarStream.add(_image);
-      _repository.setUserAvatar(_image.toString());
+    userAvatarStream.add(_image);
+    _repository.setUserAvatar(_image.toString());
   }
 
   getUserAvatar() async {
     var userAvatar = await _repository.getUserAvatar();
-    if(userAvatar != null)
-    
-    userAvatar.add(_image);
+    if (userAvatar != null) userAvatar.add(_image);
   }
 
-  setUserName(String userName){
+  setUserName(String userName) {
     _repository.setUserName(userName);
   }
 
-  getUserName() async{
+  getUserName() async {
     String userName = await _repository.getUserName();
     userNameStream.add(userName);
   }
 
-  setEmail(String email){
+  setEmail(String email) {
     _repository.setEmail(email);
   }
 
-  getEmail() async{
+  getEmail() async {
     String email = await _repository.getEmail();
     emailStream.add(email);
   }
 
-  dispose(){
+  dispose() {
     userAvatarStream.close();
     userNameStream.close();
     emailStream.close();

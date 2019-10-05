@@ -1,6 +1,5 @@
 import 'package:cdcalctest/core/blocs/bloc_profile.dart';
 import 'package:cdcalctest/core/ui/widgets/bottom_sheet.dart';
-import 'package:cdcalctest/core/ui/widgets/text_form.dart';
 import 'package:flutter/material.dart';
 
 class PrifileTab extends StatefulWidget {
@@ -12,78 +11,90 @@ class PrifileTab extends StatefulWidget {
 
 class PrifileTabState extends State<PrifileTab> {
   final profileBloc = ProfileBloc();
-  String name = "Tony Stark";
-  String email = '';
+  String name;
+  String email;
   static final RegExp nameRegExp = RegExp('[a-zA-Z-а-яА-Я-]');
-  static final RegExp nameRegExp2 = RegExp("[a-zA-Z0-9+.\_\%-+]{1,256}@[a-zA-Z0-9][a-zA-Z0-9-]{0,64}(.[a-zA-Z0-9][a-zA-Z0-9-]{0,25})+");
-  GlobalKey<FormState> _key = new GlobalKey();
-  GlobalKey<FormState> _key2 = new GlobalKey();
+  static final RegExp nameRegExp2 = RegExp(
+      "[a-zA-Z0-9+.\_\%-+]{1,256}@[a-zA-Z0-9][a-zA-Z0-9-]{0,64}(.[a-zA-Z0-9][a-zA-Z0-9-]{0,25})+");
+  GlobalKey<FormState> _nameKey = new GlobalKey();
+  GlobalKey<FormState> _emailKey = new GlobalKey();
   bool _validate = false;
-  FocusNode _focusNode;
+  bool _validate2 = false;
+  FocusNode _nameFocus;
+  FocusNode _emailFocus;
 
   @override
   void initState() {
     // profileBloc.getUserAvatar();
-    profileBloc.getEmail();
-    profileBloc.getUserName();
-    _focusNode = FocusNode();
-    _focusNode.addListener(() {
-      if (!_focusNode.hasFocus) saveName();
+    _nameFocus = FocusNode();
+    _emailFocus = FocusNode();
+    _nameFocus.addListener(() {
+      if (!_nameFocus.hasFocus) saveName();
+    });
+    _emailFocus.addListener(() {
+      if (!_emailFocus.hasFocus) saveEmail();
     });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Stack(children: <Widget>[
+    return Container(
+        child: Column(children: <Widget>[
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          StreamBuilder(
+              stream: profileBloc.outUserAvatar,
+              builder: (context, snapshot) {
+                return Container(
+                    width: 270,
+                    height: 270,
+                    child: Stack(children: <Widget>[
+                      Center(
+                          child: Container(
+                        width: 200,
+                        height: 200,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                              fit: BoxFit.cover,
+                              image: snapshot.data != null
+                                  ? FileImage(snapshot.data)
+                                  : AssetImage("assets/user.png")),
+                          border: Border.all(width: 3, color: Colors.grey),
+                          borderRadius: BorderRadius.all(Radius.circular(30)),
+                        ),
+                      )),
+                      Positioned(
+                          bottom: 20,
+                          right: 20,
+                          child: FloatingActionButton(
+                            backgroundColor: Colors.grey,
+                            child: Icon(Icons.photo_camera),
+                            onPressed: () => bottomSheet(context),
+                          )),
+                    ]));
+              }),
+        ],
+      ),
       Container(
+          width: MediaQuery.of(context).size.width - 100,
           child: Column(children: <Widget>[
-        Row(
-          children: <Widget>[
-            StreamBuilder(
-                stream: profileBloc.outUserAvatar,
-                builder: (context, snapshot) {
-                  return Container(
-                      width: 210,
-                      height: 220,
-                      child: Stack(children: <Widget>[
-                        Center(
-                            child: Container(
-                          width: 150,
-                          height: 150,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                                fit: BoxFit.cover,
-                                image: snapshot.data != null
-                                    ? FileImage(snapshot.data)
-                                    : AssetImage("assets/user.png")),
-                            border: Border.all(width: 3, color: Colors.grey),
-                            borderRadius: BorderRadius.all(Radius.circular(30)),
-                          ),
-                        )),
-                        Positioned(
-                            bottom: 20,
-                            right: 20,
-                            child: FloatingActionButton(
-                              backgroundColor: Colors.grey,
-                              child: Icon(Icons.photo_camera),
-                              onPressed: () => bottomSheet(context),
-                            )),
-                      ]));
-                }),
-            Container(
-                width: 170,
-                child: Form(
-                    key: _key, autovalidate: _validate, child: UserTextForm(stream: profileBloc.outUserName,
-                    focusNode: _focusNode, nameRegExp: nameRegExp, onSaved: (String val) {
-            name = val;
-          },))),
-          ],
-        ),
-      ]))
-    ]);
+            Text("User Name:", style: TextStyle(fontWeight: FontWeight.w600)),
+            Form(
+              key: _nameKey,
+              autovalidate: _validate,
+              child: formInput(),
+            ),
+            SizedBox(height: 20),
+            Text("Email:", style: TextStyle(fontWeight: FontWeight.w600)),
+            Form(
+                key: _emailKey,
+                autovalidate: _validate2,
+                child: emailFormInput()),
+          ])),
+    ]));
   }
-
 
   Widget formInput() {
     return StreamBuilder(
@@ -91,7 +102,7 @@ class PrifileTabState extends State<PrifileTab> {
       builder: (context, snapshot) {
         return TextFormField(
           maxLength: 25,
-          focusNode: _focusNode,
+          focusNode: _nameFocus,
           decoration: InputDecoration(
               hasFloatingPlaceholder: false,
               alignLabelWithHint: true,
@@ -107,13 +118,45 @@ class PrifileTabState extends State<PrifileTab> {
     );
   }
 
+  Widget emailFormInput() {
+    return StreamBuilder(
+      stream: profileBloc.outEmail,
+      builder: (context, snapshot) {
+        return TextFormField(
+          focusNode: _emailFocus,
+          decoration: InputDecoration(
+              hasFloatingPlaceholder: false,
+              alignLabelWithHint: true,
+              hintText: snapshot.data),
+          validator: (value) => value.isEmpty
+              ? 'Your email address is empty'
+              : (nameRegExp2.hasMatch(value) ? null : 'Enter a Valid E-mail'),
+          onSaved: (String val) {
+            email = val;
+          },
+        );
+      },
+    );
+  }
+
   saveName() {
-    if (_key.currentState.validate()) {
-      _key.currentState.save();
+    if (_nameKey.currentState.validate()) {
+      _nameKey.currentState.save();
       profileBloc.setUserName(name);
     } else {
       setState(() {
         _validate = true;
+      });
+    }
+  }
+
+  saveEmail() {
+    if (_emailKey.currentState.validate()) {
+      _emailKey.currentState.save();
+      profileBloc.setEmail(email);
+    } else {
+      setState(() {
+        _validate2 = true;
       });
     }
   }
@@ -132,17 +175,26 @@ class PrifileTabState extends State<PrifileTab> {
                 BotSheet(
                   icon: Icons.photo_camera,
                   label: "Take photo",
-                  onTap: () => profileBloc.getImageFromCamera(),
+                  onTap: () {
+                    profileBloc.getImageFromCamera();
+                    Navigator.of(context).pop(true);
+                  },
                 ),
                 BotSheet(
                   icon: Icons.photo,
                   label: "Upload from gallery",
-                  onTap: () => profileBloc.getImageFromGallery(),
+                  onTap: () {
+                    profileBloc.getImageFromGallery();
+                    Navigator.of(context).pop(true);
+                  },
                 ),
                 BotSheet(
                   icon: Icons.delete,
                   label: "Remove photo",
-                  onTap: () => profileBloc.userAvatarStream.add(null),
+                  onTap: () {
+                    profileBloc.userAvatarStream.add(null);
+                    Navigator.of(context).pop(true);
+                  },
                 )
               ],
             ),

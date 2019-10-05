@@ -1,9 +1,15 @@
 
 import 'package:cdcalctest/core/resources/shared_preferences.dart';
+  
+import 'package:cdcalctest/core/resources/network_manager.dart';
 
 class Repository {
 
   final sharedPrefs = SharedPrefs();
+  final network = Network();
+
+  registerUser() => network.registerUser();
+  loginUser() => network.loginUser();
 
   setUserAvatar(_image) => sharedPrefs.setUserAvatar(_image);
   getUserAvatar() => sharedPrefs.getUserAvatar();
