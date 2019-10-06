@@ -34,4 +34,15 @@ class SharedPrefs {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString('email');
   }
+
+  Future<String> setPassword(String pass) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('pass', pass);
+    return pass;
+  }
+
+  Future<String> getPassword() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('pass');
+  }
 }

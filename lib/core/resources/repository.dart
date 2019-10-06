@@ -1,7 +1,4 @@
-
-import 'package:cdcalctest/core/models/user.dart';
 import 'package:cdcalctest/core/resources/shared_preferences.dart';
-  
 import 'package:cdcalctest/core/resources/network_manager.dart';
 
 class Repository {
@@ -9,12 +6,16 @@ class Repository {
   final sharedPrefs = SharedPrefs();
   final network = Network();
 
-  registerUser() => network.registerUser();
-  Future<User>loginUser() => network.loginUser();
+  registerUser(String email, String password) =>
+      network.registerUser(email, password);
+  loginUser(String email, String password) =>
+      network.loginUser(email, password);
   setUserAvatar(_image) => sharedPrefs.setUserAvatar(_image);
   getUserAvatar() => sharedPrefs.getUserAvatar();
   setUserName(userName) => sharedPrefs.setUserName(userName);
   getUserName() => sharedPrefs.getUserName();
   setEmail(email) => sharedPrefs.setEmail(email);
   getEmail() => sharedPrefs.getEmail();
+  setPassword(pass) => sharedPrefs.setEmail(pass);
+  getPassword() => sharedPrefs.getEmail();
 }

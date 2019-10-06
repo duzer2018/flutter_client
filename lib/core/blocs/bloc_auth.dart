@@ -6,61 +6,48 @@ import 'package:rxdart/rxdart.dart';
 class AuthBloc extends BlocBase {
   User user = User();
   final _repository = Repository();
-  final _userDataController = BehaviorSubject<User>();
-  final _userTokenController = BehaviorSubject<User>();
+  final _userErrorController = BehaviorSubject<String>();
+  final _userTokenController = BehaviorSubject<String>();
 
-  Observable<User> get outUserData => _userDataController.stream;
-  Observable<User> get outUserToken => _userTokenController.stream;
+  Observable<String> get outUserError => _userErrorController.stream;
+  Observable<String> get outUserToken => _userTokenController.stream;
 
-  register() async {
-    user = await _repository.registerUser();
-    print("user id bloc =" + user.userId);
-//    _userTokenController.add(user.token);
+  register(String email, String password) async {
+    user = await _repository.registerUser(email, password);
+    _userTokenController.add(user.token);
+    _setUserShared(user);
+    _addError();
   }
 
-//  reportQuest(double lat, double lon, int id) {
-//    Future<ReportData> report = _repository.report(_user, lat, lon, id);
-//    _reportController.sink.addStream(report.asStream());
-//  }
-
-  login() async {
-
-   _userTokenController.sink.add(await _repository.loginUser());
-
-//   print("user token " +  user.token);
-
+  login(String email, String password) async {
+    user = await _repository.loginUser(email, password);
+   _userTokenController.sink.add(user.token);
+    _setUserShared(user);
+    _addError();
   }
 
-  setUserAvatar(String userName) {
-    _repository.setUserAvatar(user.avatarUrl);
+  _addError(){
+    if (user.error != null)
+      _userErrorController.add(user.error);
   }
 
-//  getUserAvatar() async {
-//    var userAvatar = await _repository.getUserAvatar();
-//    if (userAvatar != null) userAvatar.add(_image);
-//  }
-
-  setUserName(String userName) {
-    _repository.setUserName(user.firstName);
+  setAuthShared(String email, String password){
+    _repository.setEmail(email);
+    _repository.setPassword(password);
   }
 
-//  getUserName() async {
-//    String userName = await _repository.getUserName();
-//    userNameStream.add(userName);
-//  }
-
-  setEmail(String email) {
-    _repository.setEmail(user.params.email);
+  _setUserShared(User user){
+    if (user.avatarUrl != null){
+      _repository.setUserAvatar(user.avatarUrl);
+    }
+    if (user.firstName != null){
+      _repository.setUserAvatar(user.firstName);
+    }
   }
-
-//  getEmail() async {
-//    String email = await _repository.getEmail();
-//    emailStream.add(email);
-//  }
 
   @override
   void dispose() {
-    _userDataController.close();
+    _userErrorController.close();
     _userTokenController.close();
   }
 }
