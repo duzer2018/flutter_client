@@ -2,14 +2,14 @@ import 'package:cdcalctest/core/blocs/bloc_profile.dart';
 import 'package:cdcalctest/core/ui/widgets/bottom_sheet.dart';
 import 'package:flutter/material.dart';
 
-class PrifileTab extends StatefulWidget {
+class ProfileTab extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return PrifileTabState();
+    return ProfileTabState();
   }
 }
 
-class PrifileTabState extends State<PrifileTab> {
+class ProfileTabState extends State<ProfileTab> {
   final profileBloc = ProfileBloc();
   String name;
   String email;

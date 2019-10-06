@@ -62,7 +62,7 @@ class TabViewState extends State<TabView> with TickerProviderStateMixin {
           ),
         ),
         Container(
-          child: PrifileTab(),
+          child: ProfileTab(),
         ),
       ],
     );

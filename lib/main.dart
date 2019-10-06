@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
           child: BlocProvider(
             bloc: ProfileBloc(),
             child: Scaffold(
-              body: TabView(),
+              body: LoginPage(),
             ),
           )),
 //      theme: ThemeData(
