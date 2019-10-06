@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cdcalctest/core/blocs/bloc_profile.dart';
 import 'package:cdcalctest/core/ui/widgets/bottom_sheet.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +27,7 @@ class ProfileTabState extends State<ProfileTab> {
 
   @override
   void initState() {
-    // profileBloc.getUserAvatar();
+    profileBloc.getUserAvatar();
     _nameFocus = FocusNode();
     _emailFocus = FocusNode();
     _nameFocus.addListener(() {
@@ -39,61 +41,63 @@ class ProfileTabState extends State<ProfileTab> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        child: Column(children: <Widget>[
-      Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          StreamBuilder(
-              stream: profileBloc.outUserAvatar,
-              builder: (context, snapshot) {
-                return Container(
-                    width: 270,
-                    height: 270,
-                    child: Stack(children: <Widget>[
-                      Center(
-                          child: Container(
-                        width: 200,
-                        height: 200,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                              fit: BoxFit.cover,
-                              image: snapshot.data != null
-                                  ? FileImage(snapshot.data)
-                                  : AssetImage("assets/user.png")),
-                          border: Border.all(width: 3, color: Colors.grey),
-                          borderRadius: BorderRadius.all(Radius.circular(30)),
-                        ),
-                      )),
-                      Positioned(
-                          bottom: 20,
-                          right: 20,
-                          child: FloatingActionButton(
-                            backgroundColor: Colors.grey,
-                            child: Icon(Icons.photo_camera),
-                            onPressed: () => bottomSheet(context),
-                          )),
-                    ]));
-              }),
-        ],
-      ),
+    return ListView(children: <Widget>[
       Container(
-          width: MediaQuery.of(context).size.width - 100,
           child: Column(children: <Widget>[
-            Text("User Name:", style: TextStyle(fontWeight: FontWeight.w600)),
-            Form(
-              key: _nameKey,
-              autovalidate: _validate,
-              child: formInput(),
-            ),
-            SizedBox(height: 20),
-            Text("Email:", style: TextStyle(fontWeight: FontWeight.w600)),
-            Form(
-                key: _emailKey,
-                autovalidate: _validate2,
-                child: emailFormInput()),
-          ])),
-    ]));
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            StreamBuilder(
+                stream: profileBloc.outUserAvatar,
+                builder: (context, snapshot) {
+                  return Container(
+                      width: 270,
+                      height: 270,
+                      child: Stack(children: <Widget>[
+                        Center(
+                            child: Container(
+                          width: 200,
+                          height: 200,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                                fit: BoxFit.cover,
+                                image: snapshot.data != null
+                                    ? FileImage(File(snapshot.data))
+                                    : AssetImage("assets/user.png")),
+                            border: Border.all(width: 3, color: Colors.grey),
+                            borderRadius: BorderRadius.all(Radius.circular(30)),
+                          ),
+                        )),
+                        Positioned(
+                            bottom: 20,
+                            right: 20,
+                            child: FloatingActionButton(
+                              backgroundColor: Colors.grey,
+                              child: Icon(Icons.photo_camera),
+                              onPressed: () => bottomSheet(context),
+                            )),
+                      ]));
+                }),
+          ],
+        ),
+        Container(
+            width: MediaQuery.of(context).size.width - 100,
+            child: Column(children: <Widget>[
+              Text("User Name:", style: TextStyle(fontWeight: FontWeight.w600)),
+              Form(
+                key: _nameKey,
+                autovalidate: _validate,
+                child: formInput(),
+              ),
+              SizedBox(height: 20),
+              Text("Email:", style: TextStyle(fontWeight: FontWeight.w600)),
+              Form(
+                  key: _emailKey,
+                  autovalidate: _validate2,
+                  child: emailFormInput()),
+            ])),
+      ]))
+    ]);
   }
 
   Widget formInput() {

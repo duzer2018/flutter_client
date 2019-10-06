@@ -5,6 +5,7 @@ import 'package:cdcalctest/core/blocs/bloc_provider.dart';
 import 'package:cdcalctest/core/resources/repository.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:gallery_saver/gallery_saver.dart';
 
 class ProfileBloc extends BlocBase {
   ProfileBloc() {
@@ -24,21 +25,26 @@ class ProfileBloc extends BlocBase {
   Observable get outEmail => emailStream.stream;
 
   Future getImageFromCamera() async {
-    var image = await ImagePicker.pickImage(source: ImageSource.camera);
-    _image = image;
-    userAvatarStream.add(_image);
+    // var image = await
+    ImagePicker.pickImage(source: ImageSource.camera)
+        .then((File recordedImage) {
+      GallerySaver.saveImage(recordedImage.path);
+      _image = recordedImage;
+      userAvatarStream.add(_image.path);
+      _repository.setUserAvatar(recordedImage.path);
+    });
   }
 
   Future getImageFromGallery() async {
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
     _image = image;
-    userAvatarStream.add(_image);
-    _repository.setUserAvatar(_image.toString());
+    userAvatarStream.add(_image.path);
+    _repository.setUserAvatar(_image.path);
   }
 
   getUserAvatar() async {
     var userAvatar = await _repository.getUserAvatar();
-    if (userAvatar != null) userAvatar.add(_image);
+    if (userAvatar != null) userAvatarStream.add(userAvatar);
   }
 
   setUserName(String userName) {
