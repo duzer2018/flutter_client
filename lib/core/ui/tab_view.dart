@@ -1,4 +1,4 @@
-import 'package:cdcalctest/core/ui/prifile_tab.dart';
+import 'package:cdcalctest/core/ui/profile_tab.dart';
 import 'package:flutter/material.dart';
 
 class TabView extends StatefulWidget {
