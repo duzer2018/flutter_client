@@ -34,7 +34,8 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-        body: Container(
+        body: ListView(children: <Widget>[
+         Container(
             child: Center(
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -144,7 +145,7 @@ class _LoginPageState extends State<LoginPage> {
 //                                  })),
                         ],
                       ),
-                    ]))));
+                    ])))]));
   }
 
   loginAndRegistration() {

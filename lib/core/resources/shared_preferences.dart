@@ -4,6 +4,7 @@ class SharedPrefs {
   Future<String> setUserAvatar(String userAvatar) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('userAvatar', userAvatar);
+    print("userAvatar === $userAvatar");
     return userAvatar;
   }
 
