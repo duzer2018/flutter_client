@@ -20,7 +20,6 @@ class TabViewState extends State<TabView> with TickerProviderStateMixin {
       if (tabController.index == 0) {
         Navigator.pop(context);
         tabController.index = 1;
-
       }
     });
   }
