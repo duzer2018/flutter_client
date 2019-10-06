@@ -1,18 +1,30 @@
 class User {
   String userId;
+  String firstName;
   Params params;
   String avatarUrl;
+  String error;
+  String token;
 
-  User({this.userId, this.params, this.avatarUrl});
+  User({this.userId, this.firstName, this.params, this.avatarUrl, this.token, this.error});
 
   factory User.fromResult(Map<String, dynamic> json) {
     return User(
       userId: json['userId'].toString(),
+      firstName: json['firstName'].toString(),
       params: Params.fetchResult(json['params']),
       avatarUrl: json['avatarUrl'] as String,
+      token: json['token'] as String,
+    );
+  }
+
+  factory User.fromError(Map<String, dynamic> json) {
+    return User(
+      error: json['error'].toString(),
     );
   }
 }
+
 class Params {
   String email;
 
@@ -28,6 +40,16 @@ class Params {
 //"username":"","Status":0,"avatarUrl":"https://sun1-28.userapi.com/c846416/v846416629/1197f7/gks30F_xp7A.jpg?ava=1",
 //"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTQ0NywiZXhwIjoxNTc1Mjc5Nzk3LCJpc3MiOiJ1Z25lc3QuY29tIn0.sWPxWtsoTtH78LxfHtKa3JXltb0oSYtCRSjpedsfCsI"}}
 
+
+//register: {userId: 5467, firstName: , lastName: , Role: 0,
+//params: {promotedBy: 0, attributes: null, email: kirill1233455662370@zhuharev.ru, bio: , bdate: 0001-01-01T00:00:00Z, hometown: },
+//username: , Status: 0, avatarUrl: https://sun1-28.userapi.com/c846416/v846416629/1197f7/gks30F_xp7A.jpg?ava=1,
+// token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTQ2NywiZXhwIjoxNTc1NTY1ODM5LCJpc3MiOiJ1Z25lc3QuY29tIn0.-uG8zZUPHSdjMjM4tEw-xITbdo44sJOaXpe7lfACEgU}
+
+//login: {userId: 5467, firstName: , lastName: , Role: 0,
+//params: {promotedBy: 0, attributes: null, email: kirill1233455662370@zhuharev.ru, bio: , bdate: 0001-01-01T00:00:00Z, hometown: },
+//username: , Status: 0, avatarUrl: https://sun1-28.userapi.com/c846416/v846416629/1197f7/gks30F_xp7A.jpg?ava=1,
+// token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTQ2NywiZXhwIjoxNTc1NTY2MTAwLCJpc3MiOiJ1Z25lc3QuY29tIn0.zDbdONt8wRFLX1YoRpPYIJzYJSs5fz2LqyLDM3LRKqE}
 
 //{
 //"jsonrpc": "2.0",

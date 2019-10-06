@@ -1,6 +1,8 @@
   
 import 'package:cdcalctest/core/blocs/bloc_auth.dart';
 import 'package:cdcalctest/core/blocs/bloc_provider.dart';
+import 'package:cdcalctest/core/models/user.dart';
+import 'package:cdcalctest/core/ui/tab_view.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
@@ -18,6 +20,13 @@ enum FormType {
 }
 
 class _LoginPageState extends State<LoginPage> {
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
   final _formKey = GlobalKey<FormState>();
   String _email, _password;
   double _width = 0;
@@ -150,6 +159,10 @@ class _LoginPageState extends State<LoginPage> {
 
   loginAndRegistration() {
     final AuthBloc authBloc = BlocProvider.of<AuthBloc>(context);
+    authBloc.outUserToken.listen((User user) =>
+        _pushToTabs(user)
+    );
+
     return AnimatedContainer(
         padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
         decoration: BoxDecoration(color: Colors.grey[200], border: border),
@@ -191,7 +204,6 @@ class _LoginPageState extends State<LoginPage> {
                     child: Text("Login"),
                     onPressed: () {
                       authBloc.login();
-
                     },
                   ))
                   : Container(
@@ -206,7 +218,17 @@ class _LoginPageState extends State<LoginPage> {
                     onPressed: () {
                       authBloc.register();
                     },
-                  ))
+                  )),
+              StreamBuilder<User>(
+                  stream: authBloc.outUserToken,
+                  builder: (_context, userSnapshot) {
+                    if (userSnapshot.hasData) {
+                      if (userSnapshot.data.token != null) {
+                        print("data not a null");
+                      }
+                    }
+                    return Container();
+                  })
             ])));
   }
 
@@ -214,6 +236,13 @@ class _LoginPageState extends State<LoginPage> {
     final formState = _formKey.currentState;
     if (formState.validate()) {
 
+    }
+  }
+
+  _pushToTabs(User user) {
+    if (user.token != null) {
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => TabView()));
     }
   }
 }

@@ -2,7 +2,6 @@ import 'package:cdcalctest/core/blocs/bloc_auth.dart';
 import 'package:cdcalctest/core/blocs/bloc_profile.dart';
 import 'package:cdcalctest/core/blocs/bloc_provider.dart';
 import 'package:cdcalctest/core/ui/auth/auth_view.dart';
-import 'package:cdcalctest/core/ui/slider_view.dart';
 import 'package:cdcalctest/core/ui/tab_view.dart';
 import 'package:flutter/material.dart';
 
@@ -18,7 +17,7 @@ class MyApp extends StatelessWidget {
           child: BlocProvider(
             bloc: ProfileBloc(),
             child: Scaffold(
-              body: SliderView(),
+              body: LoginPage(),
             ),
           )),
 //      theme: ThemeData(
