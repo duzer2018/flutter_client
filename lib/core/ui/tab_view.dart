@@ -15,6 +15,20 @@ class TabViewState extends State<TabView> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     tabController = TabController(length: 4, vsync: this);
+    tabController.animateTo(1);
+    tabController.addListener(() {
+      if (tabController.index == 0) {
+        Navigator.pop(context);
+        tabController.index = 1;
+
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    tabController.dispose();
+    super.dispose();
   }
 
   @override
@@ -46,11 +60,7 @@ class TabViewState extends State<TabView> with TickerProviderStateMixin {
     return TabBarView(
       controller: tabController,
       children: <Widget>[
-        Container(
-          child: Center(
-            child: Text("Tab 1"),
-          ),
-        ),
+        Container(),
         Container(
           child: Center(
             child: Text("Tab 2"),
