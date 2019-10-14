@@ -107,8 +107,7 @@ class Network {
     });
   }
 
-  Future<UserMi> fetchUser(
-      String name, int id, String token) async {
+  Future<UserMi> fetchUser(String name, int id, String token) async {
     Map header = <String, String>{
       HttpHeaders.authorizationHeader: 'Bearer $token',
     };

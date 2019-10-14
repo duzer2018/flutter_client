@@ -16,6 +16,7 @@ class Repository {
   getUserName() => sharedPrefs.getUserName();
   setEmail(email) => sharedPrefs.setEmail(email);
   getEmail() => sharedPrefs.getEmail();
+
   setPassword(pass) => sharedPrefs.setEmail(pass);
   getPassword() => sharedPrefs.getEmail();
   getToken() => sharedPrefs.getToken();
@@ -23,4 +24,5 @@ class Repository {
   setToken(token) => sharedPrefs.setToken(token);
 
   updUser(name, id, token) => network.updUser(name, id, token);
+
 }

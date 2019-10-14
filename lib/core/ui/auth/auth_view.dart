@@ -36,7 +36,17 @@ class _LoginPageState extends State<LoginPage> {
   final authBloc = AuthBloc();
 
   @override
+  void initState() {
+    authBloc.outUserToken.listen((token) =>
+        _pushToTabs(token, authBloc)
+    );
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    // final AuthBloc authBloc = BlocProvider.of<AuthBloc>(context);
+    
     return new Scaffold(
         body: ListView(children: <Widget>[
       Container(
@@ -148,7 +158,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   loginAndRegistration() {
-    authBloc.outUserToken.listen((token) => _pushToTabs(token, authBloc));
+    // authBloc.outUserToken.listen((token) => _pushToTabs(token, authBloc));
     authBloc.outUserError
         .listen((error) => new SnackBar(content: new Text(error.toString())));
     return AnimatedContainer(
@@ -249,10 +259,10 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   _pushToTabs(String token, AuthBloc authBloc) {
-    if (token != null) {
-      authBloc.setAuthShared(_email, _password);
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => SliderView()));
+    if (token != "") {
+      authBloc.setAuthShared(token);
+     Navigator.pushReplacement(
+         context, MaterialPageRoute(builder: (context) => SliderView()));
     }
   }
 }
