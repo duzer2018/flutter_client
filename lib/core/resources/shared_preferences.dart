@@ -35,14 +35,14 @@ class SharedPrefs {
     return prefs.getString('email');
   }
 
-  Future<String> setPassword(String pass) async {
+  Future<String> setToken(String token) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString('pass', pass);
-    return pass;
+    prefs.setString('token', token);
+    return token;
   }
 
-  Future<String> getPassword() async {
+  Future<String> getToken() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString('pass');
+    return prefs.getString('token');
   }
 }

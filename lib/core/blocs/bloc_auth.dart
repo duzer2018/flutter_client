@@ -12,6 +12,10 @@ class AuthBloc extends BlocBase {
   Observable<String> get outUserError => _userErrorController.stream;
   Observable<String> get outUserToken => _userTokenController.stream;
 
+  AuthBloc(){
+    getAuthShared();
+  }
+
   register(String email, String password) async {
     user = await _repository.registerUser(email, password);
     _userTokenController.add(user.token);
@@ -19,7 +23,7 @@ class AuthBloc extends BlocBase {
     _addError();
   }
 
-  login(String email, String password) async {
+    login(String email, String password) async {
     user = await _repository.loginUser(email, password);
    _userTokenController.sink.add(user.token);
     _setUserShared(user);
@@ -31,17 +35,19 @@ class AuthBloc extends BlocBase {
       _userErrorController.add(user.error);
   }
 
-  setAuthShared(String email, String password){
-    _repository.setEmail(email);
-    _repository.setPassword(password);
+  setAuthShared(String token){
+    _repository.setToken(token);
+  }
+
+  getAuthShared() async {
+    String token = await _repository.getToken();
+    if(token != null)
+      _userTokenController.add(token);
   }
 
   _setUserShared(User user){
     if (user.avatarUrl != null){
       _repository.setUserAvatar(user.avatarUrl);
-    }
-    if (user.firstName != null){
-      _repository.setUserAvatar(user.firstName);
     }
   }
 
