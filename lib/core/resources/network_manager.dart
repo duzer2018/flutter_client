@@ -19,7 +19,7 @@ class Network{
         .then((result){
           user = User.fromResult(result);
           print("login: $result");
-          updUser(user, password);
+          fetchUser(user, password);
 
     })
         .catchError((error){
@@ -104,6 +104,30 @@ class Network{
     };
     var response = await http.post(BASE_URL, body: body, headers: header);
     print('_makeHTTPLogin  body: ${response.body}');
+  }
+
+  Future<User> fetchUser(User user, String pwd) async {
+    Map header = <String, String>{HttpHeaders.authorizationHeader:'Bearer ${user.token}',};
+    var body = jsonEncode({
+      'id': 2,
+      'jsonrpc':'2.0',
+      'method': 'users.Me',
+      'params': {
+        'user': {
+          'firstName': 'takobel222', //тут мы меняем имя юзера
+          'Password': "$pwd",
+          'isAdmin': false,
+          'isModerator': false,
+          'isSupervisor': false,
+          'userId': user.userId,
+        }}});
+    return await http
+        .post(BASE_URL, headers: header, body: body)
+        .then((http.Response response) {
+      final int statusCode = response.statusCode;
+      print("response.statusCode = $statusCode");
+      print("response.body updUser " + response.body);
+    });
   }
 
 //    var body = jsonEncode({'id': 1, 'method': 'auth.login','jsonrpc':'2.0', 'phone':'kirill1233455667@zhuharev.ru','password':'rf#45&Qqqq689689'});

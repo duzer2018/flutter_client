@@ -16,6 +16,6 @@ class Repository {
   getUserName() => sharedPrefs.getUserName();
   setEmail(email) => sharedPrefs.setEmail(email);
   getEmail() => sharedPrefs.getEmail();
-  setPassword(pass) => sharedPrefs.setEmail(pass);
-  getPassword() => sharedPrefs.getEmail();
+  setToken(pass) => sharedPrefs.setToken(pass);
+  getToken() => sharedPrefs.getToken();
 }
