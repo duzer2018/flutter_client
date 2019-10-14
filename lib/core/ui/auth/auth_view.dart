@@ -259,9 +259,9 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   _pushToTabs(String token, AuthBloc authBloc) {
-    if (token != "") {
+    if (token != null) {
       authBloc.setAuthShared(token);
-     Navigator.pushReplacement(
+      Navigator.pushReplacement(
          context, MaterialPageRoute(builder: (context) => SliderView()));
     }
   }

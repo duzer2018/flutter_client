@@ -35,18 +35,7 @@ class SharedPrefs {
     return prefs.getString('email');
   }
 
-  // Future<String> setToken(String token) async {
-  //   final SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   prefs.setString('token', token);
-  //   return token;
-  // }
-
-  // Future<String> getToken() async {
-  //   final SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   return prefs.getString('token');
-  // }
-
-   Future<String> setToken(String token) async {
+  Future<String> setToken(String token) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     print("token = $token");
     prefs.setString('token', token);
@@ -58,7 +47,7 @@ class SharedPrefs {
     return prefs.getString('token');
   }
 
-     Future<int> setId(int id) async {
+  Future<int> setId(int id) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setInt('id', id);
     return id;

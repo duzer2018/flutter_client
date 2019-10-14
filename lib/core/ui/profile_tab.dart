@@ -108,7 +108,7 @@ class ProfileTabState extends State<ProfileTab> {
           child: FloatingActionButton(
             heroTag: "logOut",
             onPressed: () {
-              profileBloc.setToken("");
+              profileBloc.setToken(null);
               Navigator.of(context).pushAndRemoveUntil(
                   MaterialPageRoute(builder: (context) => LoginPage()),
                   (Route<dynamic> route) => false);

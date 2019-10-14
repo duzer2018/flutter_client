@@ -18,19 +18,16 @@ class Network {
         .then((returned) => proxy.checkError(returned))
         .then((result) {
           user = User.fromResult(result);
-          sharedPrefs.setToken(user.token);
-          sharedPrefs.setUserName(user.firstName);
-          sharedPrefs.setId(user.userId);
           print("login: $result");
         })
         .catchError((error) {
-          user = User.fromError(error);
+//          user = User.fromError(error);
           print(error);
         });
     return user;
   }
 
-//  Future<void> loginUser(String email, String password) async{
+//   loginUser(String email, String password) async{
 ////    var body = jsonEncode({'id': 1, 'method': 'auth.login','jsonrpc':'2.0'});
 ////    Map header = <String, String>{
 ////      'phone': email,'password': password,
@@ -38,18 +35,20 @@ class Network {
 ////    };
 //
 //    var body = jsonEncode({
-//      'id': 2,
+//      'id':3,
 //      'method': 'auth.login',
 //      'jsonrpc':'2.0',
 //      'params': {
 //        'phone': email,
 //        'password': password}});
-//    return await http.post(BASE_URL, body: body,).then((http.Response response){
+//    await http.post(BASE_URL, body: body,).then((http.Response response){
 //      var jsonResponse = json.decode(response.body);
 //      print('loginUser  body: ${response.body}');
+//      print(  "statuscode "  +   response.statusCode.toString());
 //
-//      user = User.fromResult(jsonResponse);
-//      updUser(user, password);
+////      user = UserMe.fromJson(jsonResponse);
+//    }).catchError((error) {
+//      print("erroe " + error.toString());
 //    });
 //  }
 
@@ -66,15 +65,13 @@ class Network {
         })
         .catchError((error) {
           user = User.fromError(error);
-          sharedPrefs.setToken(user.token);
-          sharedPrefs.setId(user.userId);
           print("user error " + user.error);
           print("register error " + error.toString());
         });
     return user;
   }
 
-  Future<User> updUser(String name, int id, String token) async {
+  Future<void> updUser(String name, int id, String token) async {
     Map header = <String, String>{
       HttpHeaders.authorizationHeader: 'Bearer $token',
     };
@@ -84,7 +81,7 @@ class Network {
       'method': 'users.Update',
       'params': {
         'user': {
-          'firstName': name, //тут мы меняем имя юзера
+          'firstName': name,
           'Password': "pwd",
           'isAdmin': false,
           'isModerator': false,
@@ -107,7 +104,7 @@ class Network {
     });
   }
 
-  Future<UserMi> fetchUser(String name, int id, String token) async {
+  Future<UserMe> fetchUser(String name, int id, String token) async {
     Map header = <String, String>{
       HttpHeaders.authorizationHeader: 'Bearer $token',
     };
@@ -129,7 +126,7 @@ class Network {
     var response = await http.post(BASE_URL, headers: header, body: body);
     var jsonResponse = json.decode(response.body);
     print("response.body = ${response.body}");
-    var user = UserMi.fromJson(jsonResponse);
+    var user = UserMe.fromJson(jsonResponse);
     sharedPrefs.setUserName(user.result.firstName);
     return user;
   }

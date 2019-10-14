@@ -1,19 +1,14 @@
-
-
-
-class UserMi{
-  int jsonrpc;
+class UserMe{
   Result result;
   int id;
 
-  UserMi({
-    this.jsonrpc,
+  UserMe({
     this.id,
     this.result
   });
 
-  factory UserMi.fromJson(Map<String, dynamic> parsedJson){
-    return UserMi(
+  factory UserMe.fromJson(Map<String, dynamic> parsedJson){
+    return UserMe(
       result: Result.fromJson(parsedJson["result"])
     );
   }
