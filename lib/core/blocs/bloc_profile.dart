@@ -14,7 +14,6 @@ class ProfileBloc extends BlocBase {
   }
 
   File _image;
-  String pwd = "123456ppnn";
 
   final userAvatarStream = BehaviorSubject();
   final userNameStream = BehaviorSubject();
@@ -51,7 +50,7 @@ class ProfileBloc extends BlocBase {
   setUserName(String name) async{
     String token = await _repository.getToken();
     int id = await _repository.getId();
-    _repository.updUser(name, pwd, id, token);
+    _repository.updUser(name, id, token);
   }
 
   getUserName() async {
@@ -67,6 +66,9 @@ class ProfileBloc extends BlocBase {
     String email = await _repository.getEmail();
     emailStream.add(email);
   }
+
+
+  setToken(token) => _repository.setToken(token);
 
   dispose() {
     userAvatarStream.close();

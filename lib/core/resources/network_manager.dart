@@ -9,6 +9,7 @@ import 'package:http/http.dart' as http;
 class Network {
   static const String BASE_URL = 'https://m.ugnest.com/rpc/v1';
   ServerProxy proxy = ServerProxy('https://m.ugnest.com/rpc/v1');
+  final sharedPrefs = SharedPrefs();
   User user = User();
 
   Future<User> loginUser(String email, String password) async {
@@ -17,8 +18,9 @@ class Network {
         .then((returned) => proxy.checkError(returned))
         .then((result) {
           user = User.fromResult(result);
-          SharedPrefs().setToken(user.token);
-          SharedPrefs().setId(user.userId);
+          sharedPrefs.setToken(user.token);
+          sharedPrefs.setUserName(user.firstName);
+          sharedPrefs.setId(user.userId);
           print("login: $result");
         })
         .catchError((error) {
@@ -64,15 +66,15 @@ class Network {
         })
         .catchError((error) {
           user = User.fromError(error);
-          SharedPrefs().setToken(user.token);
-          SharedPrefs().setId(user.userId);
+          sharedPrefs.setToken(user.token);
+          sharedPrefs.setId(user.userId);
           print("user error " + user.error);
           print("register error " + error.toString());
         });
     return user;
   }
 
-  Future<User> updUser(String name, String pwd, int id, String token) async {
+  Future<User> updUser(String name, int id, String token) async {
     Map header = <String, String>{
       HttpHeaders.authorizationHeader: 'Bearer $token',
     };
@@ -83,7 +85,7 @@ class Network {
       'params': {
         'user': {
           'firstName': name, //тут мы меняем имя юзера
-          'Password': "$pwd",
+          'Password': "pwd",
           'isAdmin': false,
           'isModerator': false,
           'isSupervisor': false,
@@ -101,12 +103,12 @@ class Network {
       print("jsonString = $jsonString");
       print("response.statusCode = $statusCode");
       print("response.body updUser " + response.body);
-      fetchUser(name, pwd, id, token);
+      fetchUser(name, id, token);
     });
   }
 
   Future<UserMi> fetchUser(
-      String name, String pwd, int id, String token) async {
+      String name, int id, String token) async {
     Map header = <String, String>{
       HttpHeaders.authorizationHeader: 'Bearer $token',
     };
@@ -117,7 +119,7 @@ class Network {
       'params': {
         'user': {
           'firstName': name,
-          'Password': "$pwd",
+          'Password': "pwd",
           'isAdmin': false,
           'isModerator': false,
           'isSupervisor': false,
@@ -129,7 +131,7 @@ class Network {
     var jsonResponse = json.decode(response.body);
     print("response.body = ${response.body}");
     var user = UserMi.fromJson(jsonResponse);
-    SharedPrefs().setUserName(user.result.firstName);
+    sharedPrefs.setUserName(user.result.firstName);
     return user;
   }
 

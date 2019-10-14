@@ -48,6 +48,7 @@ class SharedPrefs {
 
    Future<String> setToken(String token) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
+    print("token = $token");
     prefs.setString('token', token);
     return token;
   }

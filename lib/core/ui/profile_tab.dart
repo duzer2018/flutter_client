@@ -1,7 +1,8 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:cdcalctest/core/blocs/bloc_profile.dart';
-import 'package:cdcalctest/core/models/user.dart';
+import 'package:cdcalctest/core/ui/auth/auth_view.dart';
 import 'package:cdcalctest/core/ui/widgets/bottom_sheet.dart';
 import 'package:flutter/material.dart';
 
@@ -43,61 +44,83 @@ class ProfileTabState extends State<ProfileTab> {
   @override
   Widget build(BuildContext context) {
     return ListView(children: <Widget>[
-      Container(
-          child: Column(children: <Widget>[
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            StreamBuilder(
-                stream: profileBloc.outUserAvatar,
-                builder: (context, snapshot) {
-                  return Container(
-                      width: 270,
-                      height: 270,
-                      child: Stack(children: <Widget>[
-                        Center(
-                            child: Container(
-                          width: 200,
-                          height: 200,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                                fit: BoxFit.cover,
-                                image: snapshot.data != null
-                                    ? FileImage(File(snapshot.data))
-                                    : AssetImage("assets/user.png")),
-                            border: Border.all(width: 3, color: Colors.grey),
-                            borderRadius: BorderRadius.all(Radius.circular(30)),
-                          ),
-                        )),
-                        Positioned(
-                            bottom: 20,
-                            right: 20,
-                            child: FloatingActionButton(
-                              backgroundColor: Colors.grey,
-                              child: Icon(Icons.photo_camera),
-                              onPressed: () => bottomSheet(context),
-                            )),
-                      ]));
-                }),
-          ],
-        ),
+      Stack(children: <Widget>[
         Container(
-            width: MediaQuery.of(context).size.width - 100,
             child: Column(children: <Widget>[
-              Text("User Name:", style: TextStyle(fontWeight: FontWeight.w600)),
-              Form(
-                key: _nameKey,
-                autovalidate: _validate,
-                child: formInput(),
-              ),
-              SizedBox(height: 20),
-              Text("Email:", style: TextStyle(fontWeight: FontWeight.w600)),
-              Form(
-                  key: _emailKey,
-                  autovalidate: _validate2,
-                  child: emailFormInput()),
-            ])),
-      ]))
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              StreamBuilder(
+                  stream: profileBloc.outUserAvatar,
+                  builder: (context, snapshot) {
+                    return Container(
+                        width: 270,
+                        height: 270,
+                        child: Stack(children: <Widget>[
+                          Center(
+                              child: Container(
+                            width: 200,
+                            height: 200,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: snapshot.data != null
+                                      ? FileImage(File(snapshot.data))
+                                      : AssetImage("assets/user.png")),
+                              border: Border.all(width: 3, color: Colors.grey),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(30)),
+                            ),
+                          )),
+                          Positioned(
+                              bottom: 20,
+                              right: 20,
+                              child: FloatingActionButton(
+                                backgroundColor: Colors.grey,
+                                child: Icon(Icons.photo_camera),
+                                onPressed: () => bottomSheet(context),
+                              )),
+                        ]));
+                  }),
+            ],
+          ),
+          Container(
+              width: MediaQuery.of(context).size.width - 100,
+              child: Column(children: <Widget>[
+                Text("User Name:",
+                    style: TextStyle(fontWeight: FontWeight.w600)),
+                Form(
+                  key: _nameKey,
+                  autovalidate: _validate,
+                  child: formInput(),
+                ),
+                SizedBox(height: 20),
+                Text("Email:", style: TextStyle(fontWeight: FontWeight.w600)),
+                Form(
+                    key: _emailKey,
+                    autovalidate: _validate2,
+                    child: emailFormInput()),
+              ])),
+        ])),
+        Positioned(
+          right: 10,
+          top: 10,
+          child: FloatingActionButton(
+            heroTag: "logOut",
+            onPressed: () {
+              profileBloc.setToken("");
+              Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(builder: (context) => LoginPage()),
+                  (Route<dynamic> route) => false);
+            },
+            child: 
+            Transform.rotate(
+              angle: 180 * pi / 180,
+              child: 
+               Icon(Icons.exit_to_app),
+          )),
+        )
+      ])
     ]);
   }
 
