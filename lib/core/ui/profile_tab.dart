@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cdcalctest/core/blocs/bloc_profile.dart';
+import 'package:cdcalctest/core/models/user.dart';
 import 'package:cdcalctest/core/ui/widgets/bottom_sheet.dart';
 import 'package:flutter/material.dart';
 
@@ -110,7 +111,7 @@ class ProfileTabState extends State<ProfileTab> {
           decoration: InputDecoration(
               hasFloatingPlaceholder: false,
               alignLabelWithHint: true,
-              hintText: snapshot.data),
+              hintText: snapshot.data != null ? snapshot.data : ""),
           validator: (value) => value.length < 3
               ? 'Name less than 3 characters'
               : (nameRegExp.hasMatch(value) ? null : 'Enter a Valid Name'),
@@ -136,7 +137,7 @@ class ProfileTabState extends State<ProfileTab> {
               ? 'Your email address is empty'
               : (nameRegExp2.hasMatch(value) ? null : 'Enter a Valid E-mail'),
           onSaved: (String val) {
-            email = val;
+            name = val;
           },
         );
       },

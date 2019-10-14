@@ -1,3 +1,36 @@
+
+
+
+class UserMi{
+  int jsonrpc;
+  Result result;
+  int id;
+
+  UserMi({
+    this.jsonrpc,
+    this.id,
+    this.result
+  });
+
+  factory UserMi.fromJson(Map<String, dynamic> parsedJson){
+    return UserMi(
+      result: Result.fromJson(parsedJson["result"])
+    );
+  }
+}
+
+class Result {
+  String firstName;
+
+  Result({this.firstName});
+
+  factory Result.fromJson(Map<String, dynamic> json){
+    return Result(
+      firstName: json['firstName'],
+    );
+  }
+}
+
 class User {
   int userId;
   String firstName;
@@ -12,7 +45,7 @@ class User {
     return User(
       userId: json['userId'] as int,
       firstName: json['firstName'].toString(),
-//      params: Params.fetchResult(json['params']),
+     params: Params.fetchResult(json['params']),
       avatarUrl: json['avatarUrl'] as String,
       token: json['token'] as String,
       error: json['error'].toString(),

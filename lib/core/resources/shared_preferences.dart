@@ -45,4 +45,26 @@ class SharedPrefs {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString('pass');
   }
+
+   Future<String> setToken(String token) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('token', token);
+    return token;
+  }
+
+  Future<String> getToken() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('token');
+  }
+
+     Future<int> setId(int id) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setInt('id', id);
+    return id;
+  }
+
+  Future<int> getId() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getInt('id');
+  }
 }
