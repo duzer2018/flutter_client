@@ -1,9 +1,9 @@
 import 'dart:io';
 import 'dart:math';
 
-import 'package:cdcalctest/core/blocs/bloc_profile.dart';
-import 'package:cdcalctest/core/ui/auth/auth_view.dart';
-import 'package:cdcalctest/core/ui/widgets/bottom_sheet.dart';
+import 'package:flutter_client/core/blocs/bloc_profile.dart';
+import 'package:flutter_client/core/ui/auth/auth_view.dart';
+import 'package:flutter_client/core/ui/widgets/bottom_sheet.dart';
 import 'package:flutter/material.dart';
 
 class ProfileTab extends StatefulWidget {
@@ -109,6 +109,7 @@ class ProfileTabState extends State<ProfileTab> {
             heroTag: "logOut",
             onPressed: () {
               profileBloc.setToken(null);
+              profileBloc.setUserSharedName(null);
               Navigator.of(context).pushAndRemoveUntil(
                   MaterialPageRoute(builder: (context) => LoginPage()),
                   (Route<dynamic> route) => false);

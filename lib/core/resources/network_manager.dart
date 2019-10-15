@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:cdcalctest/core/models/user.dart';
-import 'package:cdcalctest/core/resources/shared_preferences.dart';
+import 'package:flutter_client/core/models/user.dart';
+import 'package:flutter_client/core/resources/shared_preferences.dart';
 import 'package:jsonrpc2/jsonrpc_io_client.dart';
 import 'package:http/http.dart' as http;
 
@@ -82,11 +82,9 @@ class Network {
       'params': {
         'user': {
           'firstName': name,
-          'Password': "pwd",
           'isAdmin': false,
           'isModerator': false,
           'isSupervisor': false,
-          'userId': id,
         }
       }
     });
@@ -100,11 +98,11 @@ class Network {
       print("jsonString = $jsonString");
       print("response.statusCode = $statusCode");
       print("response.body updUser " + response.body);
-      fetchUser(name, id, token);
+      fetchUser(token);
     });
   }
 
-  Future<UserMe> fetchUser(String name, int id, String token) async {
+  Future<UserMe> fetchUser(String token) async {
     Map header = <String, String>{
       HttpHeaders.authorizationHeader: 'Bearer $token',
     };
@@ -113,33 +111,22 @@ class Network {
       'jsonrpc': '2.0',
       'method': 'users.Me',
       'params': {
-        'user': {
-          'firstName': name,
-          'Password': "pwd",
-          'isAdmin': false,
-          'isModerator': false,
-          'isSupervisor': false,
-          'userId': id,
-        }
+//        'user': {
+//          'firstName': name,
+//          'Password': "pwd",
+//          'isAdmin': false,
+//          'isModerator': false,
+//          'isSupervisor': false,
+//          'userId': id,
+//        }
       }
     });
     var response = await http.post(BASE_URL, headers: header, body: body);
     var jsonResponse = json.decode(response.body);
-    print("response.body = ${response.body}");
+    print("fetchUser response.body = ${response.body}");
     var user = UserMe.fromJson(jsonResponse);
     sharedPrefs.setUserName(user.result.firstName);
     return user;
-  }
-
-  Future<void> _makeHTTPLogin() async {
-    var body = jsonEncode({'id': 1, 'method': 'auth.login', 'jsonrpc': '2.0'});
-    Map header = <String, String>{
-      'phone': 'kirill12334@zhuharev.ru',
-      'password': 'Qqqq689689',
-      "Content-Type": "application/json"
-    };
-    var response = await http.post(BASE_URL, body: body, headers: header);
-    print('_makeHTTPLogin  body: ${response.body}');
   }
 
 //    var body = jsonEncode({'id': 1, 'method': 'auth.login','jsonrpc':'2.0', 'phone':'kirill1233455667@zhuharev.ru','password':'rf#45&Qqqq689689'});

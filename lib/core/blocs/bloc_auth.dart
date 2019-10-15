@@ -1,6 +1,6 @@
-import 'package:cdcalctest/core/blocs/bloc_provider.dart';
-import 'package:cdcalctest/core/models/user.dart';
-import 'package:cdcalctest/core/resources/repository.dart';
+import 'package:flutter_client/core/blocs/bloc_provider.dart';
+import 'package:flutter_client/core/models/user.dart';
+import 'package:flutter_client/core/resources/repository.dart';
 import 'package:rxdart/rxdart.dart';
 
 class AuthBloc extends BlocBase {

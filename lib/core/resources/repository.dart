@@ -1,5 +1,5 @@
-import 'package:cdcalctest/core/resources/shared_preferences.dart';
-import 'package:cdcalctest/core/resources/network_manager.dart';
+import 'package:flutter_client/core/resources/shared_preferences.dart';
+import 'package:flutter_client/core/resources/network_manager.dart';
 
 class Repository {
 
@@ -24,5 +24,6 @@ class Repository {
   setToken(token) => sharedPrefs.setToken(token);
 
   updUser(name, id, token) => network.updUser(name, id, token);
+  fetchUser(token) => network.fetchUser(token);
 
 }

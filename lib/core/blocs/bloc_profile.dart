@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:cdcalctest/core/blocs/bloc_provider.dart';
-import 'package:cdcalctest/core/models/user.dart';
-import 'package:cdcalctest/core/resources/repository.dart';
+import 'package:flutter_client/core/models/user.dart';
+import 'package:flutter_client/core/blocs/bloc_provider.dart';
+import 'package:flutter_client/core/resources/repository.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:gallery_saver/gallery_saver.dart';
@@ -11,6 +11,7 @@ class ProfileBloc extends BlocBase {
   ProfileBloc() {
     getUserName();
     getEmail();
+    fetchUserData();
   }
 
   File _image;
@@ -25,7 +26,6 @@ class ProfileBloc extends BlocBase {
   Observable get outEmail => emailStream.stream;
 
   Future getImageFromCamera() async {
-    // var image = await
     ImagePicker.pickImage(source: ImageSource.camera)
         .then((File recordedImage) {
       GallerySaver.saveImage(recordedImage.path);
@@ -53,6 +53,15 @@ class ProfileBloc extends BlocBase {
     _repository.updUser(name, id, token);
   }
 
+  fetchUserData() async {
+    UserMe user = UserMe();
+    String token = await _repository.getToken();
+    user = await _repository.fetchUser(token);
+    userNameStream.add(user.result.firstName);
+  }
+
+  setUserSharedName(name) => _repository.setUserName(name);
+
   getUserName() async {
     String userName = await _repository.getUserName();
     userNameStream.add(userName);
@@ -66,7 +75,6 @@ class ProfileBloc extends BlocBase {
     String email = await _repository.getEmail();
     emailStream.add(email);
   }
-
 
   setToken(token) => _repository.setToken(token);
 

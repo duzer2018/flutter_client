@@ -1,6 +1,5 @@
-import 'package:cdcalctest/core/blocs/bloc_auth.dart';
-import 'package:cdcalctest/core/blocs/bloc_provider.dart';
-import 'package:cdcalctest/core/ui/slider_view.dart';
+import 'package:flutter_client/core/blocs/bloc_auth.dart';
+import 'package:flutter_client/core/ui/slider_view.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
